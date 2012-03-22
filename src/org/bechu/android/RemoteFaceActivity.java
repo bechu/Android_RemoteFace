@@ -11,7 +11,7 @@ import android.widget.TextView;
 	public class RemoteFaceActivity extends Activity implements View.OnClickListener {
 		
 		private FaceView faceView;
-		
+		private Thread sThread = null;
 		@Override
 	    public void onCreate(Bundle savedInstanceState) {
 	     	requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -23,8 +23,11 @@ import android.widget.TextView;
 	        
 	        setContentView(R.layout.main);
 	        faceView = (FaceView)findViewById(R.id.FaceView);
-		    Thread sThread = new Thread(new PainterService(faceView));
-	        sThread.start();
+	        if(sThread == null)
+	        {
+	        	sThread = new Thread(new PainterService(faceView));
+	        	sThread.start();
+	        }
 	        
 	    }
 	    

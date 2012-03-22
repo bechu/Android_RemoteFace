@@ -37,7 +37,7 @@ public class FaceView extends SurfaceView implements SurfaceHolder.Callback {
 
 		HashMap<Integer, Primitive> primitives = new HashMap<Integer, Primitive>();
 
-		private boolean mRun = false;
+		public boolean mRun = false;
 		// updates the screen clock. Also used for tempo timing.
 		private Timer mTimer = null;
 		/** Message handler used by thread to interact with TextView */
@@ -62,7 +62,7 @@ public class FaceView extends SurfaceView implements SurfaceHolder.Callback {
 			mContext = context;
 			mHandler = handler;
 			mStartedTime = System.currentTimeMillis();
-
+			mRun = false;
 			mutex = new ReentrantLock();
 		}
 
@@ -203,7 +203,16 @@ public class FaceView extends SurfaceView implements SurfaceHolder.Callback {
 
 	@Override
 	public void surfaceDestroyed(SurfaceHolder arg0) {
-		// TODO Auto-generated method stub
+        boolean retry = true;
+		thread.setRunning(false);
+        while (retry) {
+            try {
+                thread.join();
+                retry = false;
+
+            } catch (InterruptedException e) {
+            }
+        }
 
 	}
 
