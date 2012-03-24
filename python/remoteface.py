@@ -7,9 +7,13 @@ import time
 import random
 import threading
 
+IP = "192.168.0.11"
+
 class eye(object):
     def __init__(self):
         self.edge = primitive.Circle()
+        self.edge.fill = 0
+        self.edge.thickness = 10
         self.pupille = primitive.Circle()
         self.edge.radius = 120
         self.pupille.radius = 50
@@ -28,9 +32,9 @@ class eye(object):
         self.eyebrow.thickness = 20
         self.eyebrow.setColor(0,0,255)
     def update(self):
-        client.send("192.168.0.11", self.edge.getCommand())
-        client.send("192.168.0.11", self.pupille.getCommand())
-        client.send("192.168.0.11", self.eyebrow.getCommand())
+        client.send(IP, self.edge.getCommand())
+        client.send(IP, self.pupille.getCommand())
+        client.send(IP, self.eyebrow.getCommand())
 
 class Mouth(object):
     def __init__(self):
@@ -41,7 +45,7 @@ class Mouth(object):
         self.mouth.h = 30
         self.mouth.setColor(200,150,30)
     def update(self):
-        client.send("192.168.0.11", self.mouth.getCommand())
+        client.send(IP, self.mouth.getCommand())
 
 class Face(threading.Thread):
     def __init__(self):
@@ -72,13 +76,10 @@ class Face(threading.Thread):
 
     def run(self):
         while self.running:
-            try:
-                self.left.update()
-                self.right.update()
-                self.mouth.update()
-                time.sleep(0.1)
-            except Exception:
-                print "error"
+            self.left.update()
+            self.right.update()
+            self.mouth.update()
+            time.sleep(0.1)
 
 def main():
     face = Face()

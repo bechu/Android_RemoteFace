@@ -11,6 +11,8 @@ class Primitive(object):
         self.green = 0
         self.blue = 0
         self.alpha = 255
+        self.fill = 1
+        self.thickness = 1
 
     def setColor(self, r, g, b):
         self.red = r
@@ -18,7 +20,7 @@ class Primitive(object):
         self.blue = b
 
     def pparams(self):
-        return "color(%d,%d,%d,%d) " % (self.alpha, self.red, self.green, self.blue)
+        return "thickness(%d) fill(%d) color(%d,%d,%d,%d) " % (self.thickness, self.fill, self.alpha, self.red, self.green, self.blue)
 
 class Circle(Primitive):
     def __init__(self):
@@ -53,12 +55,11 @@ class Line(Primitive):
         self.y = 0
         self.x2 = 10
         self.y2 = 10
-        self.thickness = 1
     
     def getCommand(self):
         return "update %d type(line) %s %s" % (self.id,  self.params(), self.pparams())
     def params(self):
-        return "from(%d,%d) to(%d,%d) thickness(%d)" % (self.x,self.y, self.x2, self.y2, self.thickness)
+        return "from(%d,%d) to(%d,%d)" % (self.x,self.y, self.x2, self.y2)
      
 class Oval(Primitive):
     def __init__(self):

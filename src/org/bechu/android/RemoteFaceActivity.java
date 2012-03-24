@@ -8,7 +8,7 @@
 	import android.widget.Button;
 import android.widget.TextView;
 	
-	public class RemoteFaceActivity extends Activity implements View.OnClickListener {
+	public class RemoteFaceActivity extends Activity {
 		
 		private FaceView faceView;
 		private Thread sThread = null;
@@ -18,9 +18,7 @@ import android.widget.TextView;
 	   	    getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 	    	   
 	        super.onCreate(savedInstanceState);
-	        
-	        
-	        
+
 	        setContentView(R.layout.main);
 	        faceView = (FaceView)findViewById(R.id.FaceView);
 	        if(sThread == null)
@@ -29,9 +27,6 @@ import android.widget.TextView;
 	        	sThread.start();
 	        }
 	        
-	    }
-	    
-	    public void onClick(View v) {
 	    }
 
 	}

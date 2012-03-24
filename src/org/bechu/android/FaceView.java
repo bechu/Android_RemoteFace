@@ -38,41 +38,20 @@ public class FaceView extends SurfaceView implements SurfaceHolder.Callback {
 		HashMap<Integer, Primitive> primitives = new HashMap<Integer, Primitive>();
 
 		public boolean mRun = false;
-		// updates the screen clock. Also used for tempo timing.
-		private Timer mTimer = null;
-		/** Message handler used by thread to interact with TextView */
-		private Handler mHandler;
 
-		/** Handle to the surface manager object we interact with */
 		private SurfaceHolder mSurfaceHolder;
-		private long mPassedTime;
-		private long mStartedTime;
-		/** Handle to the application context, used to e.g. fetch Drawables. */
-		private Context mContext;
-		private TimerTask mTimerTask = null;
-		private final Paint mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-		// one second - used to update timer
-		private int mTaskIntervalInMillis = 1000;
 
 		ReentrantLock mutex;
 		
 		public FaceViewThread(SurfaceHolder surfaceHolder, Context context,
 				Handler handler) {
 			mSurfaceHolder = surfaceHolder;
-			mContext = context;
-			mHandler = handler;
-			mStartedTime = System.currentTimeMillis();
 			mRun = false;
 			mutex = new ReentrantLock();
 		}
 
 		public void setRunning(boolean b) {
 			mRun = b;
-
-			if (mRun == false) {
-				if (mTimerTask != null)
-					mTimerTask.cancel();
-			}
 		}
 
 		@Override
@@ -105,13 +84,8 @@ public class FaceView extends SurfaceView implements SurfaceHolder.Callback {
 				Canvas c = null;
 				try {
 					c = mSurfaceHolder.lockCanvas(null);
-					// synchronized (mSurfaceHolder) {
 					doDraw(c);
-					// }
 				} finally {
-					// do this in a finally so that if an exception is thrown
-					// during the above, we don't leave the Surface in an
-					// inconsistent state
 					if (c != null) {
 						mSurfaceHolder.unlockCanvasAndPost(c);
 					}
@@ -161,7 +135,6 @@ public class FaceView extends SurfaceView implements SurfaceHolder.Callback {
 		private void doDraw(Canvas canvas) {
 			canvas.drawColor(Color.rgb(255, 194, 194));
 			mutex.lock();
-			mPassedTime = System.currentTimeMillis() - mStartedTime;
 			Set<Integer> keys = primitives.keySet();
 			Iterator<Integer> it = keys.iterator();
 			while (it.hasNext()) {
@@ -195,7 +168,7 @@ public class FaceView extends SurfaceView implements SurfaceHolder.Callback {
 
 	@Override
 	public void surfaceCreated(SurfaceHolder arg0) {
-		Log.d("TCP", "surfaceCreated");
+		Log.d("RemoteFace", "surfaceCreated");
 		thread.setRunning(true);
 		thread.start();
 

@@ -31,6 +31,7 @@ public class Primitive {
 	public int startAngle;
 	public int sweepAngle;
 	public boolean useCenter;
+	public boolean fill;
 	public RectF oval;
 	
 	private final Paint mPaint = new    Paint(Paint.ANTI_ALIAS_FLAG);
@@ -52,11 +53,18 @@ public class Primitive {
 		sweepAngle = 360;
 		useCenter = true;
 		oval = new RectF();
+		fill = true;
 		this.updated();
 	}
 	
 	public void updated() {
 		mPaint.setARGB(alpha, red, green, blue);
+		if(fill == true) {
+			mPaint.setStyle(Paint.Style.FILL);
+		} else {
+			mPaint.setStyle(Paint.Style.STROKE);
+		}
+		mPaint.setStrokeWidth(thickness);
 	}
 	
 	public void draw(Canvas canvas) {
@@ -72,7 +80,6 @@ public class Primitive {
 		}
 		if(type == Type.Line)
 		{
-			mPaint.setStrokeWidth(thickness);
 			canvas.drawLine(x,y, w, h, mPaint);
 		}
 		if(type == Type.Oval)

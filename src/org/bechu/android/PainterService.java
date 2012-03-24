@@ -8,12 +8,8 @@ import android.util.Log;
 
 public class PainterService implements Runnable
 {
-	 
-    
-	 
-    public static final String SERVERIP = "127.0.0.1";
- 
     public static final int SERVERPORT = 4444;
+    
     private FaceView render;
     
     public PainterService(FaceView faceView) {
@@ -24,54 +20,44 @@ public class PainterService implements Runnable
  
          try {
  
-              Log.d("TCP", "S: Connecting...");
- 
-             
+              Log.d("RemoteFace", "S: Connecting...");             
  
               ServerSocket serverSocket = new ServerSocket(SERVERPORT);
 
-              Log.d("TCP", "S: Connected...");
+              Log.d("RemoteFace", "S: Connected...");
               while (true) {
 
-                  Log.d("TCP", "waiting client...");
+                  Log.d("RemoteFace", "waiting client...");
                   Socket client = serverSocket.accept();
  
-                  Log.d("TCP", "S: Receiving...");
+                  Log.d("RemoteFace", "S: Receiving...");
  
                   try {
  
                       BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
  
                       String str = in.readLine();
-                      Log.d("TCP", "S: Received: '" + str + "'");
+                      Log.d("RemoteFace", "S: Received: '" + str + "'");
                      
               		try {
             			treatCommand(str);
             		} catch(Exception e) {
-            			 Log.d("TCP", "Oups ! Une erreur est survenue : " + e );
+            			 Log.d("RemoteFace", "Oups ! Une erreur est survenue : " + e );
             		}
                       } catch(Exception e) {
  
-                        Log.e("TCP", "S: Error", e);
+                        Log.e("RemoteFace", "S: Error", e);
  
                     } finally {
  
                         client.close();
  
-                        Log.d("TCP", "S: Done.");
+                        Log.d("RemoteFace", "S: Done.");
  
-                    }
- 
- 
- 
+                    } 
               }
- 
-             
- 
          } catch (Exception e) {
- 
-                 Log.e("TCP", "S: Error", e);
- 
+                 Log.e("RemoteFace", "S: Error", e);
          }
  
     }
@@ -149,6 +135,9 @@ public class PainterService implements Runnable
 		}
 		if(name.equals("useCenter")) {
 			p.useCenter = (Integer.decode(args) == 1) ? true : false;
+		}
+		if(name.equals("fill")) {
+			p.fill = (Integer.decode(args) == 1) ? true : false;
 		}
 		
 		if(name.equals("oval")) {
