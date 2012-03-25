@@ -105,7 +105,6 @@ public class FaceView extends SurfaceView implements SurfaceHolder.Callback {
 				if(tkey.intValue() == key.intValue())
 					return p;
 			}
-			  Log.d("TCP", "ew Primitive().");
 			Primitive p = new Primitive();
 			primitives.put(key, p);
 			return primitives.get(key);
