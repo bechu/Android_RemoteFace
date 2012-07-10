@@ -1,13 +1,10 @@
-import socket
-import sys
 import primitive
 import client
 import motion
 import time
-import random
 import threading
 
-IP = "192.168.0.11"
+IP = "192.168.1.2"
 
 class eye(object):
     def __init__(self):
@@ -15,8 +12,8 @@ class eye(object):
         self.edge.fill = 0
         self.edge.thickness = 10
         self.pupille = primitive.Circle()
-        self.edge.radius = 120
-        self.pupille.radius = 50
+        self.edge.radius = 60
+        self.pupille.radius = 25
         self.edge.setColor(0,0,0)
         self.pupille.setColor(100,0,0)
         self.eyebrow = primitive.Line()
@@ -25,10 +22,10 @@ class eye(object):
         self.edge.y = y
         self.pupille.x = x
         self.pupille.y = y
-        self.eyebrow.x = x + 90
-        self.eyebrow.y = y - 30
-        self.eyebrow.x2 = x + 100
-        self.eyebrow.y2 = y + 100
+        self.eyebrow.x = x + 45
+        self.eyebrow.y = y - 15
+        self.eyebrow.x2 = x + 50
+        self.eyebrow.y2 = y + 50
         self.eyebrow.thickness = 20
         self.eyebrow.setColor(0,0,255)
     def update(self):
@@ -39,9 +36,9 @@ class eye(object):
 class Mouth(object):
     def __init__(self):
         self.mouth = primitive.Oval()
-        self.mouth.x = 50
-        self.mouth.y = 350
-        self.mouth.w = 100
+        self.mouth.x = 40
+        self.mouth.y = 220
+        self.mouth.w = 50
         self.mouth.h = 30
         self.mouth.setColor(200,150,30)
     def update(self):
@@ -49,13 +46,13 @@ class Mouth(object):
 
 class Face(threading.Thread):
     def __init__(self):
-        self.left = eye()
-        self.left.setPosition(250, 250)
-        self.right = eye()
-        self.right.setPosition(250, 550)
-        self.running = True
         threading.Thread.__init__(self)
+        self.running = True
         self.daemon = True
+        self.left = eye()
+        self.left.setPosition(150, 150)
+        self.right = eye()
+        self.right.setPosition(150, 350)
         self.m = motion.Sinus(self.left.pupille, "x", 0, 10, 0.05, 0)
         self.m.start()
         self.m = motion.Sinus(self.right.pupille, "red", 0, 200, 5, 0)

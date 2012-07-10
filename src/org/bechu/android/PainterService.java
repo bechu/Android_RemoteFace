@@ -19,12 +19,10 @@ public class PainterService implements Runnable
     public void run() {
  
          try {
- 
-              Log.d("RemoteFace", "S: Connecting...");             
- 
+      
               ServerSocket serverSocket = new ServerSocket(SERVERPORT);
-
-              Log.d("RemoteFace", "S: Connected...");
+              Log.d("RemoteFace", "S: Ready to draw ...");
+              
               while (true) {
 
                   Log.d("RemoteFace", "waiting client...");
