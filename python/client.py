@@ -1,13 +1,13 @@
 import socket
-import sys
-PORT = 4444
+
+PORT = 7777
 
 
 def send(ip, msg):
 
     try:
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    except socket.error, msg:
+    except msg:
         print "error ", msg
 
     try:

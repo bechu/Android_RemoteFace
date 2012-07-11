@@ -116,7 +116,7 @@ public class FaceView extends SurfaceView implements SurfaceHolder.Callback {
 		}
 		
 		private void doDraw(Canvas canvas) {
-			canvas.drawColor(Color.rgb(255, 194, 194));
+			canvas.drawColor(Color.rgb(200, 194, 194));
 			mutex.lock();
 			Set<Integer> keys = primitives.keySet();
 			Iterator<Integer> it = keys.iterator();

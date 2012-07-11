@@ -8,56 +8,69 @@ import android.util.Log;
 
 public class PainterService implements Runnable
 {
-    public static final int SERVERPORT = 4444;
-    
+    private ServerSocket server;
     private FaceView render;
+    private boolean run4ever = true;
     
     public PainterService(FaceView faceView) {
     	render = faceView;
 	}   
  
     public void run() {
- 
-         try {
-      
-              ServerSocket serverSocket = new ServerSocket(SERVERPORT);
-              Log.d("RemoteFace", "S: Ready to draw ...");
-              
-              while (true) {
+    	Log.d("RemoteFace", "PainterService Running ...");
+              try {
+                  server = new ServerSocket(7777);
 
-                  Log.d("RemoteFace", "waiting client...");
-                  Socket client = serverSocket.accept();
- 
+              } catch (IOException e) {
+            	  Log.d("RemoteFace", "S: Error ServerSocket instanciation");
+            	  return ;
+              }
+
+            	try {
+					server.setSoTimeout(100);
+				} catch (SocketException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+             Log.d("RemoteFace", "Server Created...");
+              while (run4ever == true) {
+
+                  Socket client = null;
+				try {
+
+					client = server.accept();
+				} catch (IOException e3) {
+					continue;
+				}
                   Log.d("RemoteFace", "S: Receiving...");
  
-                  try {
- 
-                      BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
- 
-                      String str = in.readLine();
-                      Log.d("RemoteFace", "S: Received: '" + str + "'");
-                     
-              		try {
-            			treatCommand(str);
-            		} catch(Exception e) {
-            			 Log.d("RemoteFace", "Oups ! Une erreur est survenue : " + e );
-            		}
-                      } catch(Exception e) {
- 
-                        Log.e("RemoteFace", "S: Error", e);
- 
-                    } finally {
- 
-                        client.close();
- 
-                        Log.d("RemoteFace", "S: Done.");
- 
-                    } 
-              }
-         } catch (Exception e) {
-                 Log.e("RemoteFace", "S: Error", e);
-         }
- 
+     
+                      BufferedReader in;
+					try {
+						in = new BufferedReader(new InputStreamReader(client.getInputStream()));
+	                      String str = in.readLine();
+	                      Log.d("RemoteFace", "S: Received: '" + str + "'");
+	                      
+	            			treatCommand(str);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						if(client.isClosed() == false)
+							continue;
+					}
+                  }
+              try {
+				server.close();
+                Log.d("RemoteFace", "S: Closed");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    }
+    
+    public void kill() {
+    	run4ever = false;
+        Log.d("RemoteFace", "Run4Ever ending");
     }
 	public boolean treatRemoveCommand(String cmd) {
 		Integer index = Integer.decode(cmd);

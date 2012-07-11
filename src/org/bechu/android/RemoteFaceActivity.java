@@ -11,6 +11,7 @@ import android.view.WindowManager;
 public class RemoteFaceActivity extends Activity {
 		private FaceView faceView;
 		private Thread sThread = null;
+		private PainterService painter = null;
 		@Override
 	    public void onCreate(Bundle savedInstanceState) {
 	     	requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -22,8 +23,23 @@ public class RemoteFaceActivity extends Activity {
 	        faceView = (FaceView)findViewById(R.id.FaceView);
 			if(sThread == null)
 			{
-				sThread = new Thread(new PainterService(faceView));
+				painter = new PainterService(faceView);
+				sThread = new Thread(painter);
 				sThread.start();
 			}
+		}
+		
+		@Override
+		protected void onDestroy() {
+
+            Log.d("RemoteFace", "Kill app");
+			painter.kill();
+			try {
+				Thread.sleep(200);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		    super.onDestroy();
 		}
 }
